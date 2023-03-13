@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,4 +11,5 @@ public class Room
     [SerializeField] GameObject[] m_EnemyArray;
     [SerializeField] Vector2[] m_SpawnPoints;
     [SerializeField] Tilemap m_Tilemap;
+    [SerializeField] SceneAsset m_Scene;
 }
