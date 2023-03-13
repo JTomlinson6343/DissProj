@@ -13,3 +13,9 @@ public class Room
     [SerializeField] Tilemap m_Tilemap;
     [SerializeField] SceneAsset m_Scene;
 }
+
+public class Floor
+{
+    // The 2D array which contains all the data about the current floor.
+    Room[][] m_MapArray;
+}

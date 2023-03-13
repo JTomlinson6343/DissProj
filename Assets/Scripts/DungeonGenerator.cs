@@ -10,14 +10,12 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] const int  m_RoomLimit = 1;
     // The number of rooms currently in the queue
     [SerializeField] const int  m_RoomCount = 0;
-    // The 2D array which contains all the data about the current floor.
-    Room[][]                    m_MapArray;
+    // Array containing all the floors of a dungeon.
+    Floor[]                     m_Floors;
 
     // Start is called before the first frame update
     void Start()
     {
         
     }
-
-
 }
