@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Room
+public class Room: MonoBehaviour
 {
     public Vector2 m_Pos;
     public bool m_RoomAdded = false;
@@ -12,10 +12,4 @@ public class Room
     [SerializeField] Vector2[] m_SpawnPoints;
     [SerializeField] Tilemap m_Tilemap;
     [SerializeField] SceneAsset m_Scene;
-}
-
-public class Floor
-{
-    // The 2D array which contains all the data about the current floor.
-    Room[][] m_MapArray;
 }
