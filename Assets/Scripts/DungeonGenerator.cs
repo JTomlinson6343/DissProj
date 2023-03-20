@@ -23,4 +23,9 @@ public class DungeonGenerator : MonoBehaviour
     {
         return;
     }
+
+    void GenerateFloor()
+    {
+
+    }
 }

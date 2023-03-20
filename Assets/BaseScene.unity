@@ -152,9 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8496fbbff2382f4499e32259a2bb3b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FloorLimit: 0
-  m_RoomLimit: 0
-  m_RoomCount: 0
+  m_FloorLimit: 1
+  m_RoomLimit: 5
   m_RoomVariants: []
 --- !u!4 &20239615
 Transform:
@@ -334,7 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Pos: {x: 0, y: 0}
   m_RoomAdded: 0
-  m_EnemyArray: []
   m_SpawnPoints: []
+  m_EnemyVariants: []
   m_Tilemap: {fileID: 0}
   m_Scene: {fileID: 102900000, guid: 1c7e10e34e1c95e41892eccccf8fe3c4, type: 3}
