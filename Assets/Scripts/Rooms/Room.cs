@@ -23,7 +23,7 @@ public class Room: MonoBehaviour
     // Scene that will load when the room is entered.
     [SerializeField] SceneAsset m_Scene;
 
-    void ChooseEnemySpawns()
+    virtual public void ChooseEnemySpawns()
     {
         // Return if no enemies are provided
         if (m_EnemyVariants.Length == 0 || m_EnemyVariants == null)
