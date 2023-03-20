@@ -7,7 +7,7 @@ using UnityEngine.Tilemaps;
 public class Room: MonoBehaviour
 {
     // Position of the room on the floor
-    public Vector2 m_Pos;
+    public Vector2Int m_Pos;
     // Bool for the generator to check when determining if a room has been added
     public bool m_RoomAdded = false;
     // Array of enemies for the room
