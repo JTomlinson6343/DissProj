@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int m_FloorHeight;
 
     // Positionn of the starting room
-    Vector2 m_StartRoomPos;
+    Vector2Int m_StartRoomPos;
 
     // Start is called before the first frame update
     void Start()
@@ -39,17 +41,51 @@ public class DungeonGenerator : MonoBehaviour
 
     void GenerateFloor()
     {
+
+        // Make queue of rooms
         Queue<Room> roomQueue = new Queue<Room>();
 
+        // Instantiate starting room
         StartRoom startRoom = new StartRoom();
 
+        // Instantiate floor
         Floor floor = new Floor();
+
+        // Init array to store rooms
         Room[,] mapArray = new Room[m_FloorWidth, m_FloorHeight];
 
+        // Add starting room to array
+        InitRoom(m_StartRoomPos, mapArray, startRoom);
 
+        Vector2Int[] directionArray = {
+            new Vector2Int(0, -1), new Vector2Int(1, 0),
+            new Vector2Int(0, 1), new Vector2Int(-1, 0) 
+        };
 
-        Debug.Log(mapArray[m_FloorWidth/2, m_FloorHeight/2].m_Pos);
+        while (m_RoomCount < m_RoomLimit)
+        {
+            
+            foreach (Room room in roomQueue)
+            {
+                foreach(Vector2Int dir in directionArray)
+                {
+                    // If a 50/50 chance happens, skip to the next possible room slot
+                    if (Random.Range(0, 1) == 1)
+                        continue;
+
+                    Vector2Int pos = room.m_Pos + dir;
+
+                    // Check if new cell is not already occupied
+                    if (mapArray[pos.x, pos.y] != null)
+                        continue;
+
+                    // Check there arent already too many neighbours
+
+                }
+            }
+        }
     }
+
 
     void InitRoom(Vector2Int pos, Room[,] mapArray, Room room)
     {
