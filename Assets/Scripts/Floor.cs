@@ -21,6 +21,9 @@ public class Floor
     // Queue of rooms to loop over
     Queue<Room> roomQueue = new Queue<Room>();
 
+    // Number of neighbours allowed per cell
+    const int m_Neighbourlimit = 2;
+
     // Direction lookup table to loop over when checking neighbours
     Vector2Int[] directionArray = {
             new Vector2Int(0, -1), new Vector2Int(1, 0),
@@ -89,11 +92,22 @@ public class Floor
     {
         int neighbourCount = 0;
 
-        foreach (Vector2Int dir in direc)
+        foreach (Vector2Int dir in directionArray)
         {
-
+            // Check all neighbours of cell
+            Vector2Int newPos = pos + dir;
+            if (mapArray[newPos.x, newPos.y] != null)
+            {
+                // If a neighbouring cell is occupied, increment the counter
+                neighbourCount++;
+            }
         }
 
-        return true;
+        // If the number of neighbours is too high, return true
+        if (neighbourCount > m_Neighbourlimit)
+        {
+            return true;
+        }
+        return false;
     }
 }
