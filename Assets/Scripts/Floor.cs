@@ -22,7 +22,7 @@ public class Floor
     List<Vector2Int> roomPosList;
 
     // Number of neighbours allowed per cell
-    const int m_Neighbourlimit = 2;
+    int m_Neighbourlimit = 2;
 
     // Direction lookup table to loop over when checking neighbours
     Vector2Int[] directionArray = {
@@ -33,11 +33,12 @@ public class Floor
     // Position of the starting room
     Vector2Int m_StartRoomPos;
 
-    public Floor(int width, int height, int roomLimit)
+    public Floor(int width, int height, int roomLimit, int neighbourLimit)
     {
         m_RoomLimit = roomLimit;
         m_FloorWidth = width;
         m_FloorHeight = height;
+        m_Neighbourlimit = neighbourLimit;
 
         GenerateFloor();
 

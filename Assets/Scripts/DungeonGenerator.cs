@@ -20,6 +20,8 @@ public class DungeonGenerator : MonoBehaviour
     // The number of rooms for the floor
     [SerializeField] int m_RoomLimit;
 
+    [SerializeField] int m_Neighbourlimit = 2;
+
     // Array containing all the floors of a dungeon
     Floor[] m_Floors;
 
@@ -33,7 +35,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             for (int i = 0; i < m_FloorLimit; i++)
             {
-                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit);
+                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit, m_Neighbourlimit);
             }
         }
         else
