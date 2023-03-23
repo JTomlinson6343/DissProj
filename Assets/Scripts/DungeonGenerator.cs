@@ -30,8 +30,6 @@ public class DungeonGenerator : MonoBehaviour
     {
         m_Floors = new Floor[m_FloorLimit];
 
-
-
         // Check to make sure there is enough space for all the rooms
         if (m_RoomLimit <= m_FloorWidth * m_FloorHeight)
         {
