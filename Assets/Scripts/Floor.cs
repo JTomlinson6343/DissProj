@@ -12,26 +12,23 @@ public class Floor
     public Room[,] m_MapArray;
 
     // The number of rooms for the floor
-    int m_RoomLimit;
+    readonly int m_RoomLimit;
 
     // The size (width,height) of the floor
-    int m_FloorWidth;
-    int m_FloorHeight;
+    readonly int m_FloorWidth;
+    readonly int m_FloorHeight;
 
-    // Queue of rooms to loop over
-    List<Vector2Int> roomPosList;
+    // List of rooms to loop over
+    List<Room> roomPosList;
 
     // Number of neighbours allowed per cell
-    int m_Neighbourlimit = 2;
+    readonly int m_Neighbourlimit = 2;
 
     // Direction lookup table to loop over when checking neighbours
-    Vector2Int[] directionArray = {
+    readonly Vector2Int[] directionArray = {
             new Vector2Int(0, -1), new Vector2Int(1, 0),
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
-
-    // Position of the starting room
-    Vector2Int m_StartRoomPos;
 
     public Floor(int width, int height, int roomLimit, int neighbourLimit)
     {
@@ -42,29 +39,36 @@ public class Floor
 
         GenerateFloor();
 
+        // Create the map in text form
         string mapstring = "";
 
         for (int x = 0; x < m_FloorWidth; x++)
         {
             for (int y = 0; y < m_FloorHeight; y++)
             {
+                // Use [] to mean an occupied cell 
                 if (m_MapArray[x, y] != null)
                     mapstring += "[]";
+                // Use # to mean an unoccupied cell
                 else
                     mapstring += "#";
             }
+            // Add a new line for each new row of cells
             mapstring += '\n';
         }
-
+        // Print text map to console
         Debug.Log(mapstring);
     }
 
     void GenerateFloor()
     {
-        m_StartRoomPos = new Vector2Int(m_FloorWidth / 2, m_FloorHeight / 2);
+        // Init starting room position to half 
+        Vector2Int m_StartRoomPos = new Vector2Int(m_FloorWidth / 2, m_FloorHeight / 2);
 
         // Init array to store rooms
         m_MapArray = new Room[m_FloorWidth, m_FloorHeight];
+
+        roomPosList = new List<Room>();
 
         // Instantiate starting room
         GameObject obj = new GameObject();
@@ -73,9 +77,8 @@ public class Floor
         // Add starting room to array
         InitRoom(m_StartRoomPos, startRoom);
 
-        roomPosList = new List<Vector2Int>();
-
-        roomPosList.Add(m_StartRoomPos);
+        // Add the room to the list
+        roomPosList.Add(startRoom);
 
         AddNeighbours();
     }
@@ -91,7 +94,7 @@ public class Floor
                 if (Random.Range(0, 2) == 1) continue;
 
                 // Set current position to position of potential new room
-                Vector2Int newPos = roomPosList[i] + dir;
+                Vector2Int newPos = roomPosList[i].m_Pos + dir;
 
                 // Check that the new room position isnt off the map
                 if (OutOfBoundsCheck(newPos)) continue;
@@ -102,12 +105,13 @@ public class Floor
                 // Check there arent already too many neighbours
                 if (TooManyNeighboursCheck(newPos)) continue;
 
-                roomPosList.Add(newPos);
-
                 GameObject obj = new GameObject();
                 Room newRoom = obj.AddComponent<Room>();
-
                 InitRoom(newPos, newRoom);
+
+                roomPosList.Add(newRoom);
+                roomPosList[i].m_RoomAdded = true;
+
 
                 if (roomPosList.Count >= m_RoomLimit)
                     break;
@@ -117,6 +121,7 @@ public class Floor
                 break;
         }
 
+        // If the room limit is not yet reached, loop through all the rooms in the list again
         if (roomPosList.Count < m_RoomLimit)
             AddNeighbours();
     }
@@ -127,7 +132,6 @@ public class Floor
         m_MapArray[pos.x, pos.y] = room;
         // Set position of room to position passed
         room.m_Pos = pos;
-        room.m_RoomAdded = true;
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
