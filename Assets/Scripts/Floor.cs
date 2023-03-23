@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -48,9 +48,9 @@ public class Floor
             for (int y = 0; y < m_FloorHeight; y++)
             {
                 if (m_MapArray[x, y] != null)
-                    mapstring += '8';
+                    mapstring += "[]";
                 else
-                    mapstring += '0';
+                    mapstring += "#";
             }
             mapstring += '\n';
         }
@@ -62,11 +62,12 @@ public class Floor
     {
         m_StartRoomPos = new Vector2Int(m_FloorWidth / 2, m_FloorHeight / 2);
 
-        // Instantiate starting room
-        StartRoom startRoom = new StartRoom();
-
         // Init array to store rooms
         m_MapArray = new Room[m_FloorWidth, m_FloorHeight];
+
+        // Instantiate starting room
+        GameObject obj = new GameObject();
+        StartRoom startRoom = obj.AddComponent<StartRoom>();
 
         // Add starting room to array
         InitRoom(m_StartRoomPos, startRoom);
@@ -77,10 +78,10 @@ public class Floor
 
         roomPosList.Add(test);
 
-        AddNeighbours(test);
+        AddNeighbours();
     }
 
-    void AddNeighbours(Vector2Int pos)
+    void AddNeighbours()
     {
         for (int i = 0; i < roomPosList.Count; i++)
         {
@@ -88,23 +89,21 @@ public class Floor
             foreach (Vector2Int dir in directionArray)
             {
                 // If a 50/50 chance happens, skip to the next possible room slot
-                if (Random.Range(0, 2) == 1)
-                    continue;
+                if (Random.Range(0, 2) == 1) continue;
 
                 // Set current position to position of potential new room
                 Vector2Int newPos = roomPosList[i] + dir;
 
+                // Check that the new room position isnt off the map
+                if (OutOfBoundsCheck(newPos)) continue;
+
                 // Check if new cell is not already occupied
-                if (m_MapArray[newPos.x, newPos.y] != null)
-                    continue;
+                if (m_MapArray[newPos.x, newPos.y] != null) continue;
 
                 // Check there arent already too many neighbours
-                if (TooManyNeighboursCheck(newPos))
-                    continue;
+                if (TooManyNeighboursCheck(newPos)) continue;
 
                 roomPosList.Add(newPos);
-
-                Debug.Log(newPos);
 
                 GameObject obj = new GameObject();
                 Room newRoom = obj.AddComponent<Room>();
@@ -122,7 +121,7 @@ public class Floor
         Debug.Log("HELLO");
 
         if (roomPosList.Count < m_RoomLimit)
-            AddNeighbours(pos);
+            AddNeighbours();
     }
 
     void InitRoom(Vector2Int pos, Room room)
@@ -142,6 +141,9 @@ public class Floor
         {
             // Check all neighbours of cell
             Vector2Int newPos = pos + dir;
+
+            if (OutOfBoundsCheck(newPos)) continue;
+
             if (m_MapArray[newPos.x, newPos.y] != null)
             {
                 // If a neighbouring cell is occupied, increment the counter
@@ -154,6 +156,19 @@ public class Floor
         {
             return true;
         }
+        return false;
+    }
+
+    bool OutOfBoundsCheck(Vector2Int pos)
+    {
+        // If x pos is off the map, return true
+        if (pos.x < 0 || pos.x > m_FloorWidth-1)
+            return true;
+
+        // If y pos is off the map, return true
+        if (pos.y < 0 || pos.y > m_FloorHeight-1)
+            return true;
+
         return false;
     }
 }

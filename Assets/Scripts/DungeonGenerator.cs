@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -28,11 +27,18 @@ public class DungeonGenerator : MonoBehaviour
     void Start()
     {
         m_Floors = new Floor[m_FloorLimit];
-        // Starting room is placed at the centre of the floor
 
-        for (int i = 0; i < m_FloorLimit; i++)
+        // Check to make sure there is enough space for all the rooms
+        if (m_RoomLimit <= m_FloorWidth * m_FloorHeight)
         {
-            m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit);
+            for (int i = 0; i < m_FloorLimit; i++)
+            {
+                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit);
+            }
+        }
+        else
+        {
+            Debug.Log("ERROR GENERATING MAP: Not enough space for the number of rooms specified. Decrease room limit or increase map width and/or height.");
         }
     }
 }

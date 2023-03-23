@@ -11,7 +11,7 @@ public class ExitRoom : Room
     void Start()
     {
         // Creates an isntance of the exit prefab
-        Instantiate(m_ExitPrefab);
+        //Instantiate(m_ExitPrefab);
         // Sets the position of the exit to the position set by the room
         m_ExitPrefab.transform.position = m_ExitPos;
         // Hide the exit until SpawnRoom is called
