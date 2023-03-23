@@ -112,11 +112,11 @@ public class Floor
                 roomPosList.Add(newRoom);
                 roomPosList[i].m_RoomAdded = true;
 
-
+                // If the room limit has already been reached, stop trying to generate new ones
                 if (roomPosList.Count >= m_RoomLimit)
                     break;
             }
-
+            // If the room limit has already been reached, stop trying to generate new ones
             if (roomPosList.Count >= m_RoomLimit)
                 break;
         }
