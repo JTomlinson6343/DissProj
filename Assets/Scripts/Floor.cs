@@ -18,6 +18,8 @@ public class Floor
     readonly int m_FloorWidth;
     readonly int m_FloorHeight;
 
+    GameObject m_ThisFloor;
+
     // List of rooms to loop over
     List<Room> roomPosList;
 
@@ -30,12 +32,13 @@ public class Floor
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
 
-    public Floor(int width, int height, int roomLimit, int neighbourLimit)
+    public Floor(int width, int height, int roomLimit, int neighbourLimit, GameObject floor)
     {
         m_RoomLimit = roomLimit;
         m_FloorWidth = width;
         m_FloorHeight = height;
         m_Neighbourlimit = neighbourLimit;
+        m_ThisFloor = floor;
 
         GenerateFloor();
 
@@ -71,14 +74,12 @@ public class Floor
         roomPosList = new List<Room>();
 
         // Instantiate starting room
-        GameObject obj = new GameObject();
-        StartRoom startRoom = obj.AddComponent<StartRoom>();
+        GameObject roomObj = new GameObject();
+        roomObj.transform.SetParent(m_ThisFloor.transform);
+        StartRoom startRoom = roomObj.AddComponent<StartRoom>();
 
-        // Add starting room to array
+        // Init the room
         InitRoom(m_StartRoomPos, startRoom);
-
-        // Add the room to the list
-        roomPosList.Add(startRoom);
 
         AddNeighbours();
     }
@@ -105,11 +106,8 @@ public class Floor
                 // Check there arent already too many neighbours
                 if (TooManyNeighboursCheck(newPos)) continue;
 
-                GameObject obj = new GameObject();
-                Room newRoom = obj.AddComponent<Room>();
-                InitRoom(newPos, newRoom);
+                InitRoom(newPos);
 
-                roomPosList.Add(newRoom);
                 roomPosList[i].m_RoomAdded = true;
 
                 // If the room limit has already been reached, stop trying to generate new ones
@@ -128,10 +126,30 @@ public class Floor
 
     void InitRoom(Vector2Int pos, Room room)
     {
+        room.name = pos.ToString();
         // Place room in the position passed
         m_MapArray[pos.x, pos.y] = room;
         // Set position of room to position passed
         room.m_Pos = pos;
+        // Add room to room list
+        roomPosList.Add(room);
+    }
+    void InitRoom(Vector2Int pos)
+    {
+        // Create object to contain the room
+        GameObject roomObj = new GameObject();
+        // Set parent of the gameobject to the floor gameobject
+        roomObj.transform.SetParent(m_ThisFloor.transform);
+        // Create a room as a component of roomObj
+        Room room = roomObj.AddComponent<Room>();
+
+        room.name = pos.ToString();
+        // Place room in the position passed
+        m_MapArray[pos.x, pos.y] = room;
+        // Set position of room to position passed
+        room.m_Pos = pos;
+        // Add room to room list
+        roomPosList.Add(room);
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
