@@ -66,7 +66,7 @@ public class Floor
     void GenerateFloor()
     {
         // Init starting room position to half 
-        Vector2Int m_StartRoomPos = new Vector2Int(m_FloorWidth / 2, m_FloorHeight / 2);
+        Vector2Int m_StartRoomPos = new(m_FloorWidth / 2, m_FloorHeight / 2);
 
         // Init array to store rooms
         m_MapArray = new Room[m_FloorWidth, m_FloorHeight];
@@ -143,13 +143,7 @@ public class Floor
         // Create a room as a component of roomObj
         Room room = roomObj.AddComponent<Room>();
 
-        room.name = pos.ToString();
-        // Place room in the position passed
-        m_MapArray[pos.x, pos.y] = room;
-        // Set position of room to position passed
-        room.m_Pos = pos;
-        // Add room to room list
-        roomPosList.Add(room);
+        InitRoom(pos, room);
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
