@@ -74,9 +74,7 @@ public class Floor
 
         roomPosList = new List<Vector2Int>();
 
-        Vector2Int test = m_StartRoomPos;
-
-        roomPosList.Add(test);
+        roomPosList.Add(m_StartRoomPos);
 
         AddNeighbours();
     }
