@@ -153,10 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FloorLimit: 1
-  m_RoomLimit: 5
+  m_FloorWidth: 10
+  m_FloorHeight: 10
   m_RoomVariants: []
-  m_FloorWidth: 2
-  m_FloorHeight: 2
+  m_RoomLimit: 5
 --- !u!4 &20239615
 Transform:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class DungeonGenerator : MonoBehaviour
 {
     // The number of floors generated for the dungeon
-    [SerializeField] int    m_FloorLimit;
+    [SerializeField] int m_FloorLimit;
 
     // The size (width,height) of the floor
     [SerializeField] int m_FloorWidth;
@@ -27,12 +27,12 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_Floors = new Floor[m_FloorLimit];
         // Starting room is placed at the centre of the floor
 
-        for (int i = 0; i < m_FloorLimit;)
+        for (int i = 0; i < m_FloorLimit; i++)
         {
             m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit);
         }
-        return;
     }
 }
