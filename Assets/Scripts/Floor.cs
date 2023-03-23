@@ -73,7 +73,7 @@ public class Floor
 
         roomPosList = new List<Vector2Int>();
 
-        Vector2Int test = new Vector2Int(5, 5);
+        Vector2Int test = m_StartRoomPos;
 
         roomPosList.Add(test);
 
