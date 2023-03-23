@@ -118,8 +118,6 @@ public class Floor
                 break;
         }
 
-        Debug.Log("HELLO");
-
         if (roomPosList.Count < m_RoomLimit)
             AddNeighbours();
     }
