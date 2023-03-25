@@ -40,7 +40,7 @@ public class DungeonGenerator : MonoBehaviour
                 floor.name = "Floor " + i.ToString();
 
                 // Set parent of the floor to the dungeon generator object
-                floor.transform.SetParent(transform.parent);
+                floor.transform.SetParent(transform);
 
                 // Create a floor object
                 m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit, m_Neighbourlimit, floor);
