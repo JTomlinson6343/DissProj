@@ -43,7 +43,7 @@ public class DungeonGenerator : MonoBehaviour
                 floor.transform.SetParent(transform);
 
                 // Create a floor object
-                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit, m_Neighbourlimit, floor);
+                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit, m_Neighbourlimit, floor, m_RoomVariants);
             }
         }
         else

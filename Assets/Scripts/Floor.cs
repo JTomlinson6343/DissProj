@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
 
 public class Floor
@@ -18,7 +20,11 @@ public class Floor
     readonly int m_FloorWidth;
     readonly int m_FloorHeight;
 
+    // Gameobject the room components are attached to
     GameObject m_ThisFloor;
+
+    Room[] m_RoomVariants;
+
 
     // List of rooms to loop over
     List<Room> roomPosList;
@@ -32,13 +38,14 @@ public class Floor
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
 
-    public Floor(int width, int height, int roomLimit, int neighbourLimit, GameObject floor)
+    public Floor(int width, int height, int roomLimit, int neighbourLimit, GameObject floor, Room[] roomVariants)
     {
         m_RoomLimit = roomLimit;
         m_FloorWidth = width;
         m_FloorHeight = height;
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
+        m_RoomVariants = roomVariants;
 
         GenerateFloor();
 
@@ -51,7 +58,10 @@ public class Floor
             {
                 // Use [] to mean an occupied cell 
                 if (m_MapArray[x, y] != null)
+                {
                     mapstring += "[]";
+                    SceneManager.SetActiveScene(SceneManager.GetSceneByName(m_MapArray[x, y].m_Scene.name));
+                }
                 // Use # to mean an unoccupied cell
                 else
                     mapstring += "#";
@@ -76,8 +86,11 @@ public class Floor
         // Instantiate starting room
         GameObject roomObj = new GameObject();
         roomObj.transform.SetParent(m_ThisFloor.transform);
-        StartRoom startRoom = roomObj.AddComponent<StartRoom>();
+        Room startRoom = roomObj.AddComponent<Room>();
 
+        int roomChoice = Random.Range(0, m_RoomVariants.Length);
+
+        startRoom = m_RoomVariants[roomChoice].GetComponent<Room>();
         // Init the room
         InitRoom(m_StartRoomPos, startRoom);
 
@@ -92,7 +105,7 @@ public class Floor
             foreach (Vector2Int dir in directionArray)
             {
                 // If a 50/50 chance happens, skip to the next possible room slot
-                if (Random.Range(0, 2) == 1) continue;
+                if (Random.Range(0,2) == 1) continue;
 
                 // Set current position to position of potential new room
                 Vector2Int newPos = roomPosList[i].m_Pos + dir;
@@ -126,7 +139,7 @@ public class Floor
 
     void InitRoom(Vector2Int pos, Room room)
     {
-        room.name = pos.ToString();
+        //room.name = pos.ToString();
         // Place room in the position passed
         m_MapArray[pos.x, pos.y] = room;
         // Set position of room to position passed
@@ -138,10 +151,15 @@ public class Floor
     {
         // Create object to contain the room
         GameObject roomObj = new GameObject();
+        roomObj.name = pos.ToString();
+
+        int roomChoice = Random.Range(0, m_RoomVariants.Length);
+        Room room = roomObj.AddComponent<Room>();
+
+        room = m_RoomVariants[roomChoice].GetComponent<Room>();
+
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);
-        // Create a room as a component of roomObj
-        Room room = roomObj.AddComponent<Room>();
 
         InitRoom(pos, room);
     }

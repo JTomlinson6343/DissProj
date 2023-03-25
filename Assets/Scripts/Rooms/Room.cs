@@ -21,7 +21,7 @@ public class Room: MonoBehaviour
     // Tilemap used for the room
     [SerializeField] Tilemap m_Tilemap;
     // Scene that will load when the room is entered.
-    [SerializeField] SceneAsset m_Scene;
+    public SceneAsset m_Scene;
 
     virtual public void ChooseEnemySpawns()
     {
