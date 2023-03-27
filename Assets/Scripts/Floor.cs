@@ -17,8 +17,7 @@ public class Floor
     readonly int m_RoomLimit;
 
     // The size (width,height) of the floor
-    readonly int m_FloorWidth;
-    readonly int m_FloorHeight;
+    readonly int m_MapDimensions;
 
     // Gameobject the room components are attached to
     GameObject m_ThisFloor;
@@ -38,11 +37,11 @@ public class Floor
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
 
-    public Floor(int width, int height, int roomLimit, int neighbourLimit, GameObject floor, Room[] roomVariants)
+    public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
+        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
     {
         m_RoomLimit = roomLimit;
-        m_FloorWidth = width;
-        m_FloorHeight = height;
+        m_MapDimensions = dimensions;
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
         m_RoomVariants = roomVariants;
@@ -52,9 +51,9 @@ public class Floor
         // Create the map in text form
         string mapstring = "";
 
-        for (int x = 0; x < m_FloorWidth; x++)
+        for (int x = 0; x < m_MapDimensions; x++)
         {
-            for (int y = 0; y < m_FloorHeight; y++)
+            for (int y = 0; y < m_MapDimensions; y++)
             {
                 // Use [] to mean an occupied cell 
                 if (m_MapArray[x, y] != null)
@@ -76,10 +75,10 @@ public class Floor
     void GenerateFloor()
     {
         // Init starting room position to half 
-        Vector2Int m_StartRoomPos = new(m_FloorWidth / 2, m_FloorHeight / 2);
+        Vector2Int m_StartRoomPos = new(m_MapDimensions / 2, m_MapDimensions / 2);
 
         // Init array to store rooms
-        m_MapArray = new Room[m_FloorWidth, m_FloorHeight];
+        m_MapArray = new Room[m_MapDimensions, m_MapDimensions];
 
         roomPosList = new List<Room>();
 
@@ -105,7 +104,7 @@ public class Floor
             foreach (Vector2Int dir in directionArray)
             {
                 // If a 50/50 chance happens, skip to the next possible room slot
-                if (Random.Range(0,2) == 1) continue;
+                if (Random.Range(0,100) >= 50) continue;
 
                 // Set current position to position of potential new room
                 Vector2Int newPos = roomPosList[i].m_Pos + dir;
@@ -139,7 +138,6 @@ public class Floor
 
     void InitRoom(Vector2Int pos, Room room)
     {
-        //room.name = pos.ToString();
         // Place room in the position passed
         m_MapArray[pos.x, pos.y] = room;
         // Set position of room to position passed
@@ -193,11 +191,11 @@ public class Floor
     bool OutOfBoundsCheck(Vector2Int pos)
     {
         // If x pos is off the map, return true
-        if (pos.x < 0 || pos.x > m_FloorWidth-1)
+        if (pos.x < 0 || pos.x > m_MapDimensions - 1)
             return true;
 
         // If y pos is off the map, return true
-        if (pos.y < 0 || pos.y > m_FloorHeight-1)
+        if (pos.y < 0 || pos.y > m_MapDimensions-1)
             return true;
 
         return false;

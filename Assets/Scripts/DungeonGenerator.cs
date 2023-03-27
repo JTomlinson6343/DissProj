@@ -11,16 +11,19 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int m_FloorLimit;
 
     // The size (width,height) of the floor
-    [SerializeField] int m_FloorWidth;
-    [SerializeField] int m_FloorHeight;
+    int m_FloorDimensions;
+
+    // The number of rooms for the floor
+    [Range(1, 50)]
+    [SerializeField] int m_RoomLimit;
+
+    // Number of neighbours a new room is allowed to have before it is added
+    [SerializeField] int m_Neighbourlimit = 2;
 
     // Array containing all possible rooms to be used in the dungeon
     [SerializeField] Room[] m_RoomVariants;
-
-    // The number of rooms for the floor
-    [SerializeField] int m_RoomLimit;
-
-    [SerializeField] int m_Neighbourlimit = 2;
+    [SerializeField] StartRoom[] m_StartRoomVariants;
+    [SerializeField] ExitRoom[] m_ExitRoomVariants;
 
     // Array containing all the floors of a dungeon
     Floor[] m_Floors;
@@ -28,27 +31,23 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        int dimValue = (int)math.sqrt(m_RoomLimit)*2;
+        m_FloorDimensions = dimValue;
+
         m_Floors = new Floor[m_FloorLimit];
 
-        // Check to make sure there is enough space for all the rooms
-        if (m_RoomLimit <= m_FloorWidth * m_FloorHeight)
+        for (int i = 0; i < m_FloorLimit; i++)
         {
-            for (int i = 0; i < m_FloorLimit; i++)
-            {
-                // Create an empty gameobject to contain all rooms in a floor
-                GameObject floor = new GameObject();
-                floor.name = "Floor " + i.ToString();
+            // Create an empty gameobject to contain all rooms in a floor
+            GameObject floor = new GameObject();
+            floor.name = "Floor " + i.ToString();
 
-                // Set parent of the floor to the dungeon generator object
-                floor.transform.SetParent(transform);
+            // Set parent of the floor to the dungeon generator object
+            floor.transform.SetParent(transform);
 
-                // Create a floor object
-                m_Floors[i] = new Floor(m_FloorWidth, m_FloorHeight, m_RoomLimit, m_Neighbourlimit, floor, m_RoomVariants);
-            }
-        }
-        else
-        {
-            Debug.Log("ERROR GENERATING MAP: Not enough space for the number of rooms specified. Decrease room limit or increase map width and/or height.");
+            // Create a floor object
+            m_Floors[i] = new Floor(m_FloorDimensions, m_RoomLimit, m_Neighbourlimit, floor,
+                m_RoomVariants, m_ExitRoomVariants, m_StartRoomVariants);
         }
     }
 }
