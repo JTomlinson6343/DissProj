@@ -164,12 +164,13 @@ public class Floor
         // Create object to contain the room
         GameObject roomObj = new GameObject();
         roomObj.name = pos.ToString();
-
-        int roomChoice = Random.Range(0, m_RoomVariants.Length);
         Room room = roomObj.AddComponent<Room>();
 
+        // Pick a random room
+        int roomChoice = Random.Range(0, m_RoomVariants.Length);
         Room randomRoom = m_RoomVariants[roomChoice];
 
+        // Set the values of the new room to values in the randomly picked room
         room.m_Scene         = randomRoom.m_Scene;
         room.m_EnemyVariants = randomRoom.m_EnemyVariants;
         room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
