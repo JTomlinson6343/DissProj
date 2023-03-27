@@ -11,14 +11,14 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int m_FloorLimit;
 
     // The size (width,height) of the floor
-    int m_FloorDimensions;
+    int m_FloorDimensions = 10;
 
     // The number of rooms for the floor
-    [Range(1, 50)]
+    [Range(1, 30)]
     [SerializeField] int m_RoomLimit;
 
     // Number of neighbours a new room is allowed to have before it is added
-    [SerializeField] int m_Neighbourlimit = 2;
+    [SerializeField] int m_Neighbourlimit = 1;
 
     // Array containing all possible rooms to be used in the dungeon
     [SerializeField] Room[] m_RoomVariants;
@@ -31,7 +31,7 @@ public class DungeonGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int dimValue = (int)math.sqrt(m_RoomLimit)*2;
+        int dimValue = (int)math.sqrt(m_RoomLimit) * 2 + 10;
         m_FloorDimensions = dimValue;
 
         m_Floors = new Floor[m_FloorLimit];

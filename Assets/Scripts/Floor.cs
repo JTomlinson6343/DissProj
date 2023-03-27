@@ -24,7 +24,6 @@ public class Floor
 
     Room[] m_RoomVariants;
 
-
     // List of rooms to loop over
     List<Room> roomPosList;
 
@@ -98,42 +97,57 @@ public class Floor
 
     void AddNeighbours()
     {
-        for (int i = 0; i < roomPosList.Count; i++)
+        // Counter to count how man times the algorithm fails to add a cell
+        int failCount = 0;
+        do
         {
-            // Loop through each cardinal direction and try and add a room to each one
-            foreach (Vector2Int dir in directionArray)
+            bool roomAdded = false;
+            for (int i = 0; i < roomPosList.Count; i++)
             {
-                // If a 50/50 chance happens, skip to the next possible room slot
-                if (Random.Range(0,100) >= 50) continue;
+                // Loop through each cardinal direction and try and add a room to each one
+                foreach (Vector2Int dir in directionArray)
+                {
+                    // If a 50/50 chance happens, skip to the next possible room slot
+                    if (Random.Range(0, 11) >= 5) break;
 
-                // Set current position to position of potential new room
-                Vector2Int newPos = roomPosList[i].m_Pos + dir;
+                    // Set current position to position of potential new room
+                    Vector2Int newPos = roomPosList[i].m_Pos + dir;
 
-                // Check that the new room position isnt off the map
-                if (OutOfBoundsCheck(newPos)) continue;
+                    // Check that the new room position isnt off the map
+                    if (OutOfBoundsCheck(newPos)) continue;
 
-                // Check if new cell is not already occupied
-                if (m_MapArray[newPos.x, newPos.y] != null) continue;
+                    // Check if new cell is not already occupied
+                    if (m_MapArray[newPos.x, newPos.y] != null) continue;
 
-                // Check there arent already too many neighbours
-                if (TooManyNeighboursCheck(newPos)) continue;
+                    // Check there arent already too many neighbours
+                    if (TooManyNeighboursCheck(newPos)) continue;
 
-                InitRoom(newPos);
+                    InitRoom(newPos);
 
-                roomPosList[i].m_RoomAdded = true;
+                    roomPosList[i].m_RoomAdded = true;
+                    roomAdded = true;
 
+                    // If the room limit has already been reached, stop trying to generate new ones
+                    if (roomPosList.Count >= m_RoomLimit)
+                        break;
+                }
                 // If the room limit has already been reached, stop trying to generate new ones
                 if (roomPosList.Count >= m_RoomLimit)
                     break;
             }
-            // If the room limit has already been reached, stop trying to generate new ones
-            if (roomPosList.Count >= m_RoomLimit)
-                break;
-        }
+            if (!roomAdded)
+            {
+                failCount++;
+                // If there are no new additions 1000 times, stop the algorithm
+                if (failCount >= 1000)
+                {
+                    Debug.Log("Could not add any more rooms. Only " + roomPosList.Count.ToString() + " could be added.");
 
-        // If the room limit is not yet reached, loop through all the rooms in the list again
-        if (roomPosList.Count < m_RoomLimit)
-            AddNeighbours();
+                    break;
+                }
+            }
+
+        } while (roomPosList.Count < m_RoomLimit);
     }
 
     void InitRoom(Vector2Int pos, Room room)
@@ -154,7 +168,11 @@ public class Floor
         int roomChoice = Random.Range(0, m_RoomVariants.Length);
         Room room = roomObj.AddComponent<Room>();
 
-        room = m_RoomVariants[roomChoice].GetComponent<Room>();
+        Room randomRoom = m_RoomVariants[roomChoice];
+
+        room.m_Scene         = randomRoom.m_Scene;
+        room.m_EnemyVariants = randomRoom.m_EnemyVariants;
+        room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
 
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);

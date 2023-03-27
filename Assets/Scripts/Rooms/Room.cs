@@ -14,9 +14,9 @@ public class Room: MonoBehaviour
     GameObject[] m_EnemyArray;
 
     // Array of spawn points of the room
-    [SerializeField] Vector2[] m_SpawnPoints;
+    public Vector2[] m_SpawnPoints;
     // Array of enemy types that the room uses.
-    [SerializeField] GameObject[] m_EnemyVariants;
+    public GameObject[] m_EnemyVariants;
 
     // Tilemap used for the room
     [SerializeField] Tilemap m_Tilemap;
