@@ -108,7 +108,7 @@ public class Floor
                 foreach (Vector2Int dir in directionArray)
                 {
                     // If a 50/50 chance happens, skip to the next possible room slot
-                    if (Random.Range(0, 11) >= 5) break;
+                    if (Random.Range(0, 11) >= 5) continue;
 
                     // Set current position to position of potential new room
                     Vector2Int newPos = roomPosList[i].m_Pos + dir;
