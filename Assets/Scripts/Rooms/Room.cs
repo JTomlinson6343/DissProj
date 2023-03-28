@@ -18,8 +18,6 @@ public class Room: MonoBehaviour
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
 
-    // Tilemap used for the room
-    [SerializeField] Tilemap m_Tilemap;
     // Scene that will load when the room is entered.
     public SceneAsset m_Scene;
 
