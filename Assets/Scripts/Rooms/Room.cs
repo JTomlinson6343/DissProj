@@ -14,14 +14,12 @@ public class Room: MonoBehaviour
     GameObject[] m_EnemyArray;
 
     // Array of spawn points of the room
-    [SerializeField] Vector2[] m_SpawnPoints;
+    public Vector2[] m_SpawnPoints;
     // Array of enemy types that the room uses.
-    [SerializeField] GameObject[] m_EnemyVariants;
+    public GameObject[] m_EnemyVariants;
 
-    // Tilemap used for the room
-    [SerializeField] Tilemap m_Tilemap;
     // Scene that will load when the room is entered.
-    [SerializeField] SceneAsset m_Scene;
+    public SceneAsset m_Scene;
 
     virtual public void ChooseEnemySpawns()
     {
