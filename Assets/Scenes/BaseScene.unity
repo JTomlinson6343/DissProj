@@ -152,14 +152,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8496fbbff2382f4499e32259a2bb3b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FloorLimit: 1
-  m_FloorWidth: 10
-  m_FloorHeight: 10
-  m_RoomVariants:
-  - {fileID: 1843697981}
-  - {fileID: 1843697981}
-  m_RoomLimit: 10
+  m_FloorLimit: 3
+  m_RoomLimit: 15
   m_Neighbourlimit: 1
+  m_RoomVariants:
+  - {fileID: 1159958417}
+  m_StartRoomVariants:
+  - {fileID: 1843697981}
+  m_ExitRoomVariants: []
 --- !u!4 &20239615
 Transform:
   m_ObjectHideFlags: 0
@@ -388,8 +388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Pos: {x: 0, y: 0}
   m_RoomAdded: 0
-  m_SpawnPoints:
-  - {x: 5, y: 5}
+  m_SpawnPoints: []
   m_EnemyVariants: []
   m_Tilemap: {fileID: 0}
   m_Scene: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}
