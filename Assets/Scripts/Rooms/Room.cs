@@ -18,6 +18,11 @@ public class Room: MonoBehaviour
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
 
+    [SerializeField] Vector2 m_NorthExit;
+    [SerializeField] Vector2 m_EastExit;
+    [SerializeField] Vector2 m_SouthExit;
+    [SerializeField] Vector2 m_WestExit;
+
     // Scene that will load when the room is entered.
     public SceneAsset m_Scene;
 
