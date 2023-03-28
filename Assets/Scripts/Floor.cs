@@ -58,7 +58,6 @@ public class Floor
                 if (m_MapArray[x, y] != null)
                 {
                     mapstring += "[]";
-                    SceneManager.SetActiveScene(SceneManager.GetSceneByName(m_MapArray[x, y].m_Scene.name));
                 }
                 // Use # to mean an unoccupied cell
                 else
@@ -218,5 +217,45 @@ public class Floor
             return true;
 
         return false;
+    }
+
+    public void MoveLeft(Vector2Int pos)
+    {
+        Vector2Int newPos = pos;
+        newPos.x -= 1;
+
+        Move(newPos);
+    }
+    public void MoveRight(Vector2Int pos)
+    {
+        Vector2Int newPos = pos;
+        newPos.x += 1;
+
+        Move(newPos);
+    }
+    public void MoveUp(Vector2Int pos)
+    {
+        Vector2Int newPos = pos;
+        newPos.y -= 1;
+
+        Move(newPos);
+    }
+    public void MoveDown(Vector2Int pos)
+    {
+        Vector2Int newPos = pos;
+        newPos.y += 1;
+
+        Move(newPos);
+    }
+
+    void Move(Vector2Int pos)
+    { 
+        // Check that the scene being moved to is not null
+        if (!m_MapArray[pos.x, pos.y])
+        {
+            Debug.Log("Tried moving to NULL room.");
+            return;
+        }
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(m_MapArray[pos.x, pos.y].m_Scene.name));
     }
 }
