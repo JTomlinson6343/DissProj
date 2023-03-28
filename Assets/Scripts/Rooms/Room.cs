@@ -18,6 +18,7 @@ public class Room: MonoBehaviour
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
 
+    // Exits that will teleport the player to the room in that direction
     [SerializeField] Vector2 m_NorthExit;
     [SerializeField] Vector2 m_EastExit;
     [SerializeField] Vector2 m_SouthExit;
