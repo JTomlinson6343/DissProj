@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8496fbbff2382f4499e32259a2bb3b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ExitPrefab: {fileID: 7443822049873682767, guid: 10ab62b1549d3ec47a01f5b28007e22e, type: 3}
   m_FloorLimit: 3
   m_RoomLimit: 15
   m_Neighbourlimit: 1
@@ -307,7 +308,10 @@ MonoBehaviour:
   m_RoomAdded: 0
   m_SpawnPoints: []
   m_EnemyVariants: []
-  m_Tilemap: {fileID: 0}
+  m_NorthExitPos: {x: 0, y: 0}
+  m_EastExitPos: {x: 0, y: 0}
+  m_SouthExitPos: {x: 0, y: 0}
+  m_WestExitPos: {x: 0, y: 0}
   m_Scene: {fileID: 102900000, guid: 1c7e10e34e1c95e41892eccccf8fe3c4, type: 3}
 --- !u!1 &1183505010
 GameObject:
@@ -390,5 +394,8 @@ MonoBehaviour:
   m_RoomAdded: 0
   m_SpawnPoints: []
   m_EnemyVariants: []
-  m_Tilemap: {fileID: 0}
+  m_NorthExitPos: {x: 0, y: 0}
+  m_EastExitPos: {x: 0, y: 0}
+  m_SouthExitPos: {x: 0, y: 0}
+  m_WestExitPos: {x: 0, y: 0}
   m_Scene: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}

@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
+    // Exit object prefab
+    [SerializeField] GameObject m_ExitPrefab;
+
     // The number of floors generated for the dungeon
     [SerializeField] int m_FloorLimit;
 
@@ -46,7 +49,7 @@ public class DungeonGenerator : MonoBehaviour
 
             // Create a floor object
             m_Floors[i] = new Floor(m_FloorDimensions, m_RoomLimit, m_Neighbourlimit, floor,
-                m_RoomVariants, m_ExitRoomVariants, m_StartRoomVariants);
+                m_RoomVariants, m_ExitRoomVariants, m_StartRoomVariants, m_ExitPrefab);
         }
     }
 }

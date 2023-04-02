@@ -4,12 +4,17 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
+using static UnityEditor.PlayerSettings;
 
-public class Floor
+public class Floor : MonoBehaviour
 {
+    GameObject m_ExitPrefab;
+
     // The 2D array which contains all the data about the current floor.
     public Room[,] m_MapArray;
 
@@ -37,13 +42,14 @@ public class Floor
         };
 
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
-        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
+        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants, GameObject exitPrefab)
     {
         m_RoomLimit = roomLimit;
         m_MapDimensions = dimensions;
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
         m_RoomVariants = roomVariants;
+        m_ExitPrefab = exitPrefab;
 
         GenerateFloor();
 
@@ -92,6 +98,8 @@ public class Floor
         InitRoom(m_StartRoomPos, startRoom);
 
         AddNeighbours();
+
+        Move(m_StartRoomPos);
     }
 
     void AddNeighbours()
@@ -168,12 +176,20 @@ public class Floor
         // Pick a random room
         int roomChoice = Random.Range(0, m_RoomVariants.Length);
         Room randomRoom = m_RoomVariants[roomChoice];
+        //randomRoom.InitExits();
 
         // Set the values of the new room to values in the randomly picked room
         room.m_Scene         = randomRoom.m_Scene;
+
+        for (int i = 0; i < room.m_Exits.Length; i++)
+        {
+            Exit exit = room.m_Exits[i].GetComponent<Exit>();
+            exit.m_RoomRef = room;
+        }
+
         room.m_EnemyVariants = randomRoom.m_EnemyVariants;
         room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
-
+        
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);
 
@@ -247,15 +263,17 @@ public class Floor
 
         Move(newPos);
     }
-
     void Move(Vector2Int pos)
-    { 
+    {
+        Room room = m_MapArray[pos.x, pos.y];
         // Check that the scene being moved to is not null
-        if (!m_MapArray[pos.x, pos.y])
+        if (!room)
         {
             Debug.Log("Tried moving to NULL room.");
             return;
         }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(m_MapArray[pos.x, pos.y].m_Scene.name));
+        Scene scene = SceneManager.GetSceneByName(room.m_Scene.name);
+
+        SceneManager.LoadScene(scene.name);
     }
 }

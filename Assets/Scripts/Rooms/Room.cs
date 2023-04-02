@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Room: MonoBehaviour
@@ -19,30 +20,16 @@ public class Room: MonoBehaviour
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
 
-    [SerializeField] Vector2 m_NorthExitPos;
-    [SerializeField] Vector2 m_EastExitPos;
-    [SerializeField] Vector2 m_SouthExitPos;
-    [SerializeField] Vector2 m_WestExitPos;
+    // Array of exits 
+    public GameObject[] m_Exits;
 
-    BoxCollider2D m_NorthExit;
-    BoxCollider2D m_EastExit;
-    BoxCollider2D m_SouthExit;
-    BoxCollider2D m_WestExit;
+    public Vector2 m_NorthExitPos;
+    public Vector2 m_EastExitPos;
+    public Vector2 m_SouthExitPos;
+    public Vector2 m_WestExitPos;
+
     // Scene that will load when the room is entered.
     public SceneAsset m_Scene;
-
-    void InitExits()
-    {
-        m_NorthExit = m_Scene.AddComponent<BoxCollider2D>();
-        m_EastExit = m_Scene.AddComponent<BoxCollider2D>();
-        m_SouthExit = m_Scene.AddComponent<BoxCollider2D>();
-        m_WestExit = m_Scene.AddComponent<BoxCollider2D>();
-
-        m_NorthExit.transform.position = m_NorthExitPos;
-        m_EastExit.transform.position = m_EastExitPos;
-        m_SouthExit.transform.position = m_SouthExitPos;
-        m_WestExit.transform.position = m_WestExitPos;
-    }
 
     virtual public void ChooseEnemySpawns()
     {
