@@ -49,7 +49,7 @@ public class DungeonGenerator : MonoBehaviour
 
             // Create a floor object
             m_Floors[i] = new Floor(m_FloorDimensions, m_RoomLimit, m_Neighbourlimit, floor,
-                m_RoomVariants, m_ExitRoomVariants, m_StartRoomVariants, m_ExitPrefab);
+                m_RoomVariants, m_ExitRoomVariants, m_StartRoomVariants);
         }
     }
 }

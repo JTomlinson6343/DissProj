@@ -42,14 +42,13 @@ public class Floor : MonoBehaviour
         };
 
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
-        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants, GameObject exitPrefab)
+        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
     {
         m_RoomLimit = roomLimit;
         m_MapDimensions = dimensions;
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
         m_RoomVariants = roomVariants;
-        m_ExitPrefab = exitPrefab;
 
         GenerateFloor();
 
@@ -181,10 +180,13 @@ public class Floor : MonoBehaviour
         // Set the values of the new room to values in the randomly picked room
         room.m_Scene         = randomRoom.m_Scene;
 
-        for (int i = 0; i < room.m_Exits.Length; i++)
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(room.m_Scene.name));
+        GameObject[] exits = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+
+        foreach (GameObject exit in exits)
         {
-            Exit exit = room.m_Exits[i].GetComponent<Exit>();
-            exit.m_RoomRef = room;
+            if(exit.GetComponent<Exit>())
+                exit.GetComponent<Exit>().m_RoomRef = room;
         }
 
         room.m_EnemyVariants = randomRoom.m_EnemyVariants;

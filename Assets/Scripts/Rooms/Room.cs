@@ -20,17 +20,8 @@ public class Room: MonoBehaviour
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
 
-    // Array of exits 
-    public GameObject[] m_Exits;
-
-    public Vector2 m_NorthExitPos;
-    public Vector2 m_EastExitPos;
-    public Vector2 m_SouthExitPos;
-    public Vector2 m_WestExitPos;
-
     // Scene that will load when the room is entered.
     public SceneAsset m_Scene;
-
     virtual public void ChooseEnemySpawns()
     {
         // Return if no enemies are provided
