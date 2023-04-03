@@ -180,14 +180,7 @@ public class Floor : MonoBehaviour
         // Set the values of the new room to values in the randomly picked room
         room.m_Scene         = randomRoom.m_Scene;
 
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName(room.m_Scene.name));
-        GameObject[] exits = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
 
-        foreach (GameObject exit in exits)
-        {
-            if(exit.GetComponent<Exit>())
-                exit.GetComponent<Exit>().m_RoomRef = room;
-        }
 
         room.m_EnemyVariants = randomRoom.m_EnemyVariants;
         room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
@@ -275,7 +268,17 @@ public class Floor : MonoBehaviour
             return;
         }
         Scene scene = SceneManager.GetSceneByName(room.m_Scene.name);
-
         SceneManager.LoadScene(scene.name);
+        SceneManager.SetActiveScene(scene);
+        GameObject[] exits = FindObjectsOfType<GameObject>();
+
+        int hi = 0;
+        foreach (GameObject exit in exits)
+        {
+            if (exit.GetComponent<Exit>())
+                exit.GetComponent<Exit>().m_RoomRef = room;
+
+            hi += 1;
+        }
     }
 }

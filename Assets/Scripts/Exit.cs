@@ -40,4 +40,19 @@ public class Exit : MonoBehaviour
             }
         }
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            m_RoomRef.GetComponentInParent<Floor>().MoveUp(m_RoomRef.m_Pos);
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            m_RoomRef.GetComponentInParent<Floor>().MoveRight(m_RoomRef.m_Pos);
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            m_RoomRef.GetComponentInParent<Floor>().MoveDown(m_RoomRef.m_Pos);
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            m_RoomRef.GetComponentInParent<Floor>().MoveLeft(m_RoomRef.m_Pos);
+    }
 }

@@ -8,6 +8,9 @@ using UnityEngine.Tilemaps;
 
 public class Room: MonoBehaviour
 {
+    public float m_Width;
+    public float m_Height;
+
     // Position of the room on the floor
     [HideInInspector] public Vector2Int m_Pos;
     // Bool for the generator to check when determining if a room has been added
@@ -22,6 +25,12 @@ public class Room: MonoBehaviour
 
     // Scene that will load when the room is entered.
     public SceneAsset m_Scene;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position,new Vector3(m_Width,m_Height,0));
+    }
     virtual public void ChooseEnemySpawns()
     {
         // Return if no enemies are provided
