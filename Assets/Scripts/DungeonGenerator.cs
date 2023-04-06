@@ -23,7 +23,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] int m_Neighbourlimit = 1;
 
     // Array containing all possible rooms to be used in the dungeon
-    [SerializeField] Room[] m_RoomVariants;
+    [SerializeField] SceneAsset[] m_RoomVariants;
     [SerializeField] StartRoom[] m_StartRoomVariants;
     [SerializeField] ExitRoom[] m_ExitRoomVariants;
 

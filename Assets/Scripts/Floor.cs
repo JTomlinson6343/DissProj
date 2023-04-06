@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -13,6 +12,8 @@ using static UnityEditor.PlayerSettings;
 
 public class Floor : MonoBehaviour
 {
+    static Room currentRoom;
+
     GameObject m_ExitPrefab;
 
     // The 2D array which contains all the data about the current floor.
@@ -27,10 +28,13 @@ public class Floor : MonoBehaviour
     // Gameobject the room components are attached to
     GameObject m_ThisFloor;
 
-    Room[] m_RoomVariants;
+    SceneAsset[] m_RoomVariants;
 
+    public static Queue<Room> loadRoomQueue;
     // List of rooms to loop over
     List<Room> roomPosList;
+
+    List<RoomObject> loadedRooms;
 
     // Number of neighbours allowed per cell
     readonly int m_Neighbourlimit = 2;
@@ -41,8 +45,21 @@ public class Floor : MonoBehaviour
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
 
+    public static void RegisterRoom(RoomObject room)
+    {
+        if (loadRoomQueue.Count == 0) return;
+
+        currentRoom = loadRoomQueue.Dequeue();
+
+        room.transform.position = new Vector3(
+            currentRoom.m_Pos.x * room.m_Width,
+            currentRoom.m_Pos.y * room.m_Height, 0);
+
+        room.name = currentRoom.m_Pos.x.ToString() + "," + currentRoom.m_Pos.y.ToString();
+    }
+
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
-        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
+        SceneAsset[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
     {
         m_RoomLimit = roomLimit;
         m_MapDimensions = dimensions;
@@ -51,6 +68,8 @@ public class Floor : MonoBehaviour
         m_RoomVariants = roomVariants;
 
         GenerateFloor();
+        if (loadRoomQueue == null)
+            loadRoomQueue = new Queue<Room>();
 
         // Create the map in text form
         string mapstring = "";
@@ -63,6 +82,8 @@ public class Floor : MonoBehaviour
                 if (m_MapArray[x, y] != null)
                 {
                     mapstring += "[]";
+                    loadRoomQueue.Enqueue(m_MapArray[x, y]);
+                    LoadRoom(m_MapArray[x, y]);
                 }
                 // Use # to mean an unoccupied cell
                 else
@@ -90,15 +111,15 @@ public class Floor : MonoBehaviour
         roomObj.transform.SetParent(m_ThisFloor.transform);
         Room startRoom = roomObj.AddComponent<Room>();
 
-        int roomChoice = Random.Range(0, m_RoomVariants.Length);
+        roomObj.name = "TEST";
 
-        startRoom = m_RoomVariants[roomChoice].GetComponent<Room>();
+        //int roomChoice = Random.Range(0, m_RoomVariants.Length);
+
+        //startRoom = m_RoomVariants[roomChoice].GetComponent<Room>();
         // Init the room
         InitRoom(m_StartRoomPos, startRoom);
 
         AddNeighbours();
-
-        Move(m_StartRoomPos);
     }
 
     void AddNeighbours()
@@ -164,31 +185,28 @@ public class Floor : MonoBehaviour
         room.m_Pos = pos;
         // Add room to room list
         roomPosList.Add(room);
+
     }
     void InitRoom(Vector2Int pos)
     {
         // Create object to contain the room
         GameObject roomObj = new GameObject();
-        roomObj.name = pos.ToString();
         Room room = roomObj.AddComponent<Room>();
 
         // Pick a random room
         int roomChoice = Random.Range(0, m_RoomVariants.Length);
-        Room randomRoom = m_RoomVariants[roomChoice];
-        //randomRoom.InitExits();
+        roomObj.name = m_RoomVariants[roomChoice].name;
 
-        // Set the values of the new room to values in the randomly picked room
-        room.m_Scene         = randomRoom.m_Scene;
-
-
-
-        room.m_EnemyVariants = randomRoom.m_EnemyVariants;
-        room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
-        
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);
 
         InitRoom(pos, room);
+    }
+
+    void LoadRoom(Room room)
+    {
+        SceneManager.LoadScene(room.name, LoadSceneMode.Additive);
+
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
@@ -228,57 +246,5 @@ public class Floor : MonoBehaviour
             return true;
 
         return false;
-    }
-
-    public void MoveLeft(Vector2Int pos)
-    {
-        Vector2Int newPos = pos;
-        newPos.x -= 1;
-
-        Move(newPos);
-    }
-    public void MoveRight(Vector2Int pos)
-    {
-        Vector2Int newPos = pos;
-        newPos.x += 1;
-
-        Move(newPos);
-    }
-    public void MoveUp(Vector2Int pos)
-    {
-        Vector2Int newPos = pos;
-        newPos.y -= 1;
-
-        Move(newPos);
-    }
-    public void MoveDown(Vector2Int pos)
-    {
-        Vector2Int newPos = pos;
-        newPos.y += 1;
-
-        Move(newPos);
-    }
-    void Move(Vector2Int pos)
-    {
-        Room room = m_MapArray[pos.x, pos.y];
-        // Check that the scene being moved to is not null
-        if (!room)
-        {
-            Debug.Log("Tried moving to NULL room.");
-            return;
-        }
-        Scene scene = SceneManager.GetSceneByName(room.m_Scene.name);
-        SceneManager.LoadScene(scene.name);
-        SceneManager.SetActiveScene(scene);
-        GameObject[] exits = FindObjectsOfType<GameObject>();
-
-        int hi = 0;
-        foreach (GameObject exit in exits)
-        {
-            if (exit.GetComponent<Exit>())
-                exit.GetComponent<Exit>().m_RoomRef = room;
-
-            hi += 1;
-        }
     }
 }
