@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ExitPrefab: {fileID: 7443822049873682767, guid: 10ab62b1549d3ec47a01f5b28007e22e, type: 3}
   m_FloorLimit: 1
-  m_RoomLimit: 5
+  m_RoomLimit: 20
   m_Neighbourlimit: 1
   m_RoomVariants:
   - {fileID: 102900000, guid: 1c7e10e34e1c95e41892eccccf8fe3c4, type: 3}
@@ -163,7 +163,7 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 1e8fdb17e3413af4c937cd5d611abf0b, type: 3}
   - {fileID: 102900000, guid: 005371b07b93afa4f889592ba88e7dc0, type: 3}
   m_StartRoomVariants:
-  - {fileID: 0}
+  - {fileID: 102900000, guid: a18cbfcbfc42fe34b816d5c4ae0cede5, type: 3}
   m_ExitRoomVariants:
   - {fileID: 102900000, guid: c99f5e9d536f9984d998847a88742183, type: 3}
 --- !u!4 &20239615
