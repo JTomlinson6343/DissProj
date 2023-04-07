@@ -80,10 +80,6 @@ public class Floor : MonoBehaviour
                 // Use [] to mean an occupied cell 
                 if (m_MapArray[x, y] != null)
                 {
-                    if (m_MapArray[x, y].m_RoomAdded)
-                    {
-                        Debug.Log("HELLO" + x.ToString()+","+y.ToString());
-                    }
                     mapstring += "[]";
                     loadRoomQueue.Enqueue(m_MapArray[x, y]);
                     LoadRoom(m_MapArray[x, y]);
