@@ -34,8 +34,6 @@ public class Floor : MonoBehaviour
     // List of rooms to loop over
     List<Room> roomPosList;
 
-    List<RoomObject> loadedRooms;
-
     // Number of neighbours allowed per cell
     readonly int m_Neighbourlimit = 2;
 
@@ -57,6 +55,18 @@ public class Floor : MonoBehaviour
         m_ExitRoomVariants = exitRoomVariants;
 
         GenerateFloor();
+
+        // Loop through list in reverse order to pick the last room which doesnt have a room added
+        for (int i = roomPosList.Count-1; i > 0; i--)
+        {
+            if (!roomPosList[i].m_RoomAdded)
+            {
+                // Overwrite that room's room with an exit room
+                roomPosList[i].name = PickRandomRoomName(m_ExitRoomVariants);
+                break;
+            }
+        }
+
         if (loadRoomQueue == null)
             loadRoomQueue = new Queue<Room>();
 
