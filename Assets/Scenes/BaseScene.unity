@@ -159,7 +159,9 @@ MonoBehaviour:
   m_RoomVariants:
   - {fileID: 102900000, guid: 1c7e10e34e1c95e41892eccccf8fe3c4, type: 3}
   - {fileID: 102900000, guid: 0e418a5c113a8714fb73dd7d0632f223, type: 3}
-  - {fileID: 102900000, guid: 0e418a5c113a8714fb73dd7d0632f223, type: 3}
+  - {fileID: 102900000, guid: 0817b9ea648210c4eab80c6c93df36fd, type: 3}
+  - {fileID: 102900000, guid: 1e8fdb17e3413af4c937cd5d611abf0b, type: 3}
+  - {fileID: 102900000, guid: 005371b07b93afa4f889592ba88e7dc0, type: 3}
   m_StartRoomVariants:
   - {fileID: 0}
   m_ExitRoomVariants: []

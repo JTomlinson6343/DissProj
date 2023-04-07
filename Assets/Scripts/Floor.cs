@@ -12,8 +12,6 @@ using static UnityEditor.PlayerSettings;
 
 public class Floor : MonoBehaviour
 {
-    static Room currentRoom;
-
     GameObject m_ExitPrefab;
 
     // The 2D array which contains all the data about the current floor.
@@ -44,19 +42,6 @@ public class Floor : MonoBehaviour
             new Vector2Int(0, -1), new Vector2Int(1, 0),
             new Vector2Int(0, 1), new Vector2Int(-1, 0)
         };
-
-    public static void RegisterRoom(RoomObject room)
-    {
-        if (loadRoomQueue.Count == 0) return;
-
-        currentRoom = loadRoomQueue.Dequeue();
-
-        room.transform.position = new Vector3(
-            currentRoom.m_Pos.x * room.m_Width,
-            currentRoom.m_Pos.y * room.m_Height, 0);
-
-        room.name = currentRoom.m_Pos.x.ToString() + "," + currentRoom.m_Pos.y.ToString();
-    }
 
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
         SceneAsset[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
@@ -205,8 +190,25 @@ public class Floor : MonoBehaviour
 
     void LoadRoom(Room room)
     {
+        // Loads the scene by the name of the room passed in
         SceneManager.LoadScene(room.name, LoadSceneMode.Additive);
 
+    }
+    public static void RegisterRoom(RoomObject room)
+    {
+        // Return if all rooms are already loaded
+        if (loadRoomQueue.Count == 0) return;
+
+        // Remove room from queue and store in current room
+        Room currentRoom = loadRoomQueue.Dequeue();
+
+        // Set world position of the rooms relative to the other rooms in the dungeon
+        room.transform.position = new Vector3(
+            currentRoom.m_Pos.x * room.m_Width,
+            currentRoom.m_Pos.y * room.m_Height, 0);
+
+        // Set the name of the room to its relative position in the dungeon
+        room.name = currentRoom.m_Pos.x.ToString() + "," + currentRoom.m_Pos.y.ToString();
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
