@@ -194,8 +194,10 @@ public class Floor : MonoBehaviour
 
     string PickRandomRoomName(SceneAsset[] variants)
     {
+        // Choose random room in array
         int roomChoice = Random.Range(0, variants.Length);
 
+        // Return name of the room
         return variants[roomChoice].name;
     }
 
