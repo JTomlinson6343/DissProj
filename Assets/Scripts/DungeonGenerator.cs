@@ -24,8 +24,8 @@ public class DungeonGenerator : MonoBehaviour
 
     // Array containing all possible rooms to be used in the dungeon
     [SerializeField] SceneAsset[] m_RoomVariants;
-    [SerializeField] StartRoom[] m_StartRoomVariants;
-    [SerializeField] ExitRoom[] m_ExitRoomVariants;
+    [SerializeField] SceneAsset[] m_StartRoomVariants;
+    [SerializeField] SceneAsset[] m_ExitRoomVariants;
 
     // Array containing all the floors of a dungeon
     Floor[] m_Floors;

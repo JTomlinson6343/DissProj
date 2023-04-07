@@ -44,7 +44,7 @@ public class Floor : MonoBehaviour
         };
 
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
-        SceneAsset[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
+        SceneAsset[] roomVariants, SceneAsset[]  exitRoomVariants, SceneAsset[] startRoomVariants)
     {
         m_RoomLimit = roomLimit;
         m_MapDimensions = dimensions;
@@ -66,6 +66,10 @@ public class Floor : MonoBehaviour
                 // Use [] to mean an occupied cell 
                 if (m_MapArray[x, y] != null)
                 {
+                    if (m_MapArray[x, y].m_RoomAdded)
+                    {
+                        Debug.Log("HELLO" + x.ToString()+","+y.ToString());
+                    }
                     mapstring += "[]";
                     loadRoomQueue.Enqueue(m_MapArray[x, y]);
                     LoadRoom(m_MapArray[x, y]);
