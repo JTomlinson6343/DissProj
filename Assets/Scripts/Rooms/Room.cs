@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Room: MonoBehaviour
@@ -17,9 +19,6 @@ public class Room: MonoBehaviour
     public Vector2[] m_SpawnPoints;
     // Array of enemy types that the room uses.
     public GameObject[] m_EnemyVariants;
-
-    // Scene that will load when the room is entered.
-    public SceneAsset m_Scene;
 
     virtual public void ChooseEnemySpawns()
     {

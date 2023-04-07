@@ -1,15 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Scripting.APIUpdating;
+using static UnityEditor.PlayerSettings;
 
-public class Floor
+public class Floor : MonoBehaviour
 {
+    GameObject m_ExitPrefab;
+
     // The 2D array which contains all the data about the current floor.
     public Room[,] m_MapArray;
 
@@ -22,8 +26,11 @@ public class Floor
     // Gameobject the room components are attached to
     GameObject m_ThisFloor;
 
-    Room[] m_RoomVariants;
+    SceneAsset[] m_RoomVariants;
+    SceneAsset[] m_StartRoomVariants;
+    SceneAsset[] m_ExitRoomVariants;
 
+    public static Queue<Room> loadRoomQueue;
     // List of rooms to loop over
     List<Room> roomPosList;
 
@@ -37,15 +44,31 @@ public class Floor
         };
 
     public Floor(int dimensions, int roomLimit, int neighbourLimit, GameObject floor,
-        Room[] roomVariants, Room[]  exitRoomVariants, Room[] startRoomVariants)
+        SceneAsset[] roomVariants, SceneAsset[]  exitRoomVariants, SceneAsset[] startRoomVariants)
     {
         m_RoomLimit = roomLimit;
         m_MapDimensions = dimensions;
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
         m_RoomVariants = roomVariants;
+        m_StartRoomVariants = startRoomVariants;
+        m_ExitRoomVariants = exitRoomVariants;
 
         GenerateFloor();
+
+        // Loop through list in reverse order to pick the last room which doesnt have a room added
+        for (int i = roomPosList.Count-1; i > 0; i--)
+        {
+            if (!roomPosList[i].m_RoomAdded)
+            {
+                // Overwrite that room's room with an exit room
+                roomPosList[i].name = PickRandomRoomName(m_ExitRoomVariants);
+                break;
+            }
+        }
+
+        if (loadRoomQueue == null)
+            loadRoomQueue = new Queue<Room>();
 
         // Create the map in text form
         string mapstring = "";
@@ -58,7 +81,8 @@ public class Floor
                 if (m_MapArray[x, y] != null)
                 {
                     mapstring += "[]";
-                    SceneManager.SetActiveScene(SceneManager.GetSceneByName(m_MapArray[x, y].m_Scene.name));
+                    loadRoomQueue.Enqueue(m_MapArray[x, y]);
+                    LoadRoom(m_MapArray[x, y]);
                 }
                 // Use # to mean an unoccupied cell
                 else
@@ -86,9 +110,8 @@ public class Floor
         roomObj.transform.SetParent(m_ThisFloor.transform);
         Room startRoom = roomObj.AddComponent<Room>();
 
-        int roomChoice = Random.Range(0, m_RoomVariants.Length);
+        roomObj.name = PickRandomRoomName(m_StartRoomVariants);
 
-        startRoom = m_RoomVariants[roomChoice].GetComponent<Room>();
         // Init the room
         InitRoom(m_StartRoomPos, startRoom);
 
@@ -158,27 +181,53 @@ public class Floor
         room.m_Pos = pos;
         // Add room to room list
         roomPosList.Add(room);
+
     }
     void InitRoom(Vector2Int pos)
     {
         // Create object to contain the room
         GameObject roomObj = new GameObject();
-        roomObj.name = pos.ToString();
         Room room = roomObj.AddComponent<Room>();
 
         // Pick a random room
-        int roomChoice = Random.Range(0, m_RoomVariants.Length);
-        Room randomRoom = m_RoomVariants[roomChoice];
-
-        // Set the values of the new room to values in the randomly picked room
-        room.m_Scene         = randomRoom.m_Scene;
-        room.m_EnemyVariants = randomRoom.m_EnemyVariants;
-        room.m_SpawnPoints   = randomRoom.m_SpawnPoints;
+        roomObj.name = PickRandomRoomName(m_RoomVariants);
 
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);
 
         InitRoom(pos, room);
+    }
+
+    string PickRandomRoomName(SceneAsset[] variants)
+    {
+        // Choose random room in array
+        int roomChoice = Random.Range(0, variants.Length);
+
+        // Return name of the room
+        return variants[roomChoice].name;
+    }
+
+    void LoadRoom(Room room)
+    {
+        // Loads the scene by the name of the room passed in
+        SceneManager.LoadScene(room.name, LoadSceneMode.Additive);
+
+    }
+    public static void RegisterRoom(RoomObject room)
+    {
+        // Return if all rooms are already loaded
+        if (loadRoomQueue.Count == 0) return;
+
+        // Remove room from queue and store in current room
+        Room currentRoom = loadRoomQueue.Dequeue();
+
+        // Set world position of the rooms relative to the other rooms in the dungeon
+        room.transform.position = new Vector3(
+            currentRoom.m_Pos.x * room.m_Width,
+            currentRoom.m_Pos.y * room.m_Height, 0);
+
+        // Set the name of the room to its relative position in the dungeon
+        room.name = currentRoom.m_Pos.x.ToString() + "," + currentRoom.m_Pos.y.ToString();
     }
 
     bool TooManyNeighboursCheck(Vector2Int pos)
