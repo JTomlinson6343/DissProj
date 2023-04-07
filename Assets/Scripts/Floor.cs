@@ -27,6 +27,8 @@ public class Floor : MonoBehaviour
     GameObject m_ThisFloor;
 
     SceneAsset[] m_RoomVariants;
+    SceneAsset[] m_StartRoomVariants;
+    SceneAsset[] m_ExitRoomVariants;
 
     public static Queue<Room> loadRoomQueue;
     // List of rooms to loop over
@@ -51,6 +53,8 @@ public class Floor : MonoBehaviour
         m_Neighbourlimit = neighbourLimit;
         m_ThisFloor = floor;
         m_RoomVariants = roomVariants;
+        m_StartRoomVariants = startRoomVariants;
+        m_ExitRoomVariants = exitRoomVariants;
 
         GenerateFloor();
         if (loadRoomQueue == null)
@@ -100,11 +104,8 @@ public class Floor : MonoBehaviour
         roomObj.transform.SetParent(m_ThisFloor.transform);
         Room startRoom = roomObj.AddComponent<Room>();
 
-        roomObj.name = "TEST";
+        roomObj.name = PickRandomRoomName(m_StartRoomVariants);
 
-        //int roomChoice = Random.Range(0, m_RoomVariants.Length);
-
-        //startRoom = m_RoomVariants[roomChoice].GetComponent<Room>();
         // Init the room
         InitRoom(m_StartRoomPos, startRoom);
 
@@ -183,13 +184,19 @@ public class Floor : MonoBehaviour
         Room room = roomObj.AddComponent<Room>();
 
         // Pick a random room
-        int roomChoice = Random.Range(0, m_RoomVariants.Length);
-        roomObj.name = m_RoomVariants[roomChoice].name;
+        roomObj.name = PickRandomRoomName(m_RoomVariants);
 
         // Set parent of the gameobject to the floor gameobject
         roomObj.transform.SetParent(m_ThisFloor.transform);
 
         InitRoom(pos, room);
+    }
+
+    string PickRandomRoomName(SceneAsset[] variants)
+    {
+        int roomChoice = Random.Range(0, variants.Length);
+
+        return variants[roomChoice].name;
     }
 
     void LoadRoom(Room room)
