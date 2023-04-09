@@ -213,7 +213,7 @@ public class Floor : MonoBehaviour
         SceneManager.LoadScene(room.name, LoadSceneMode.Additive);
 
     }
-    public static void RegisterRoom(RoomObject room)
+    public static void RegisterRoom(RoomScene room)
     {
         // Return if all rooms are already loaded
         if (loadRoomQueue.Count == 0) return;

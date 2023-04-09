@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class RoomObject : MonoBehaviour
+public class RoomScene : MonoBehaviour
 {
     // Width of the room
     public float m_Width;
