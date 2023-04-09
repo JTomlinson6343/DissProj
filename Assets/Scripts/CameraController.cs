@@ -8,8 +8,6 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] float m_CameraMoveSpeed;
 
-    [SerializeField] GameObject m_PlayerRef;
-
     // Start is called before the first frame update
     void Start()
     {

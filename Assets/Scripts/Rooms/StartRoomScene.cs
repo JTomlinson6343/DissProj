@@ -6,7 +6,8 @@ public class StartRoomScene : RoomScene
 {
     private void Start()
     {
-        RoomScene
+        Init();
         CameraController.currentRoom = this;
     }
+
 }

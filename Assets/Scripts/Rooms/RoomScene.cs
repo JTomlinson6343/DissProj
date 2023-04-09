@@ -18,8 +18,12 @@ public class RoomScene : MonoBehaviour
 
     void Start()
     {
-        Floor.RegisterRoom(this);
+        Init();
+    }
 
+    public void Init()
+    {
+        Floor.RegisterRoom(this);
         InitCollider();
     }
 
@@ -42,7 +46,7 @@ public class RoomScene : MonoBehaviour
 
     public Vector3 GetRoomCenterPosition()
     {
-        return new Vector3(m_Width/2, m_Height/2, 0);
+        return transform.position;
     }
 
     // Update is called once per frame
@@ -51,9 +55,9 @@ public class RoomScene : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             CameraController.currentRoom = this;
         }
