@@ -6,6 +6,8 @@ public class CameraController : MonoBehaviour
 {
     public static RoomScene currentRoom;
 
+    [SerializeField] float m_CameraMoveSpeed;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +22,12 @@ public class CameraController : MonoBehaviour
 
     void UpdateCamera()
     {
+        Vector3 newRoomPos = GetNewPosition();
 
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            newRoomPos,
+            Time.deltaTime * m_CameraMoveSpeed);
     }
 
     Vector3 GetNewPosition()
@@ -30,6 +37,8 @@ public class CameraController : MonoBehaviour
             return Vector3.zero;
         }
 
-        return new Vector3(currentRoom.GetRoomCenterPosition(),;
+        Vector3 newPos = currentRoom.GetRoomCenterPosition();
+
+        return new Vector3(newPos.x,newPos.y,transform.position.z);
     }
 }
