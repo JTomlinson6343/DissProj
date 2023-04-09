@@ -59,6 +59,7 @@ public class RoomScene : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // Set current room reference in camera controller to this room
             CameraController.currentRoom = this;
         }
     }

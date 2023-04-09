@@ -8,8 +8,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Vector3 pos = CameraController.currentRoom.GetRoomCenterPosition();
-        //transform.position = new Vector3 (pos.x, pos.y, 0);
+
     }
 
     // Update is called once per frame
