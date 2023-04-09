@@ -12,8 +12,6 @@ using static UnityEditor.PlayerSettings;
 
 public class Floor : MonoBehaviour
 {
-    GameObject m_ExitPrefab;
-
     // The 2D array which contains all the data about the current floor.
     public Room[,] m_MapArray;
 
