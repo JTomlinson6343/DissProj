@@ -26,6 +26,11 @@ public class RoomObject : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, new Vector3(m_Width, m_Height, 0));
     }
 
+    public Vector3 GetRoomCenterPosition()
+    {
+        return new Vector3(m_Width/2, m_Height/2, 0);
+    }
+
     // Update is called once per frame
     void Update()
     {
